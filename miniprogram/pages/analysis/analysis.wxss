@@ -1,0 +1,278 @@
+/* pages/analysis/analysis.wxss */
+.generate-card {
+  padding: 40rpx 30rpx;
+  background-color: #FFFFFF;
+  border-radius: 32rpx;
+  margin-bottom: 40rpx;
+}
+
+.ai-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30rpx;
+}
+
+.ai-avatar {
+  font-size: 80rpx;
+  margin-right: 24rpx;
+  line-height: 1;
+}
+
+.ai-title-row {
+  display: flex;
+  flex-direction: column;
+}
+
+.ai-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #4A4A4A;
+}
+
+.ai-subtitle {
+  font-size: 22rpx;
+  color: #8C8C8C;
+  margin-top: 4rpx;
+}
+
+.ai-intro {
+  font-size: 26rpx;
+  color: #6A6A6A;
+  line-height: 1.6;
+  background-color: #FAF8F5;
+  padding: 26rpx;
+  border-radius: 20rpx;
+  margin-bottom: 34rpx;
+}
+
+.data-status-bar {
+  font-size: 24rpx;
+  color: #8C8C8C;
+  text-align: center;
+  margin-bottom: 24rpx;
+}
+
+.status-count {
+  font-weight: bold;
+  color: #8FAF9F;
+  font-size: 28rpx;
+}
+
+.generate-btn {
+  height: 94rpx;
+  font-size: 32rpx;
+  box-shadow: 0 8rpx 30rpx rgba(143, 175, 159, 0.3);
+}
+
+/* 生成动画 */
+.generating-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 50rpx 0 20rpx 0;
+}
+
+.spinner {
+  width: 70rpx;
+  height: 70rpx;
+  border: 6rpx solid #FAF8F5;
+  border-top: 6rpx solid #8FAF9F;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 24rpx;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.generating-tip {
+  font-size: 26rpx;
+  color: #8FAF9F;
+  font-weight: 500;
+  text-align: center;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+
+/* 历史档案列表 */
+.history-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.section-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #4A4A4A;
+  margin-bottom: 24rpx;
+}
+
+.history-card {
+  padding: 24rpx;
+  margin-bottom: 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 2rpx solid transparent;
+}
+
+.card-hover {
+  background-color: #FAF8F5;
+  border-color: #EAE5E0;
+}
+
+.history-left {
+  display: flex;
+  align-items: center;
+}
+
+.history-icon {
+  font-size: 44rpx;
+  margin-right: 20rpx;
+}
+
+.history-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.history-range {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #4A4A4A;
+}
+
+.history-date {
+  font-size: 22rpx;
+  color: #8C8C8C;
+  margin-top: 6rpx;
+}
+
+.history-arrow {
+  font-size: 22rpx;
+  color: #BCBCBC;
+}
+
+/* 报告精细显示 */
+.current-report-wrapper {
+  animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10rpx); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.report-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30rpx;
+}
+
+.report-header-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #4A4A4A;
+}
+
+.report-header-date {
+  font-size: 22rpx;
+  color: #8C8C8C;
+  margin-top: 6rpx;
+}
+
+.report-close-btn {
+  font-size: 24rpx;
+  color: #8FAF9F;
+  background-color: #FFFFFF;
+  border: 2rpx solid #8FAF9F;
+  padding: 8rpx 20rpx;
+  border-radius: 20rpx;
+  font-weight: 500;
+}
+
+.report-section {
+  border-radius: 24rpx;
+  margin-bottom: 24rpx;
+  border-top: 6rpx solid #8FAF9F;
+}
+
+.section-card-title {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #8FAF9F;
+  margin-bottom: 16rpx;
+  padding-bottom: 8rpx;
+  border-bottom: 2rpx dashed #FAF8F5;
+}
+
+.section-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 14rpx;
+}
+
+.section-line {
+  line-height: 1.6;
+}
+
+.section-line.list-item {
+  display: flex;
+  align-items: flex-start;
+}
+
+.list-bullet {
+  font-size: 20rpx;
+  margin-right: 12rpx;
+  margin-top: 4rpx;
+}
+
+.line-text {
+  font-size: 25rpx;
+  color: #5A5A5A;
+}
+
+.section-line.muted-item .line-text {
+  font-size: 22rpx;
+  color: #9C9C9C;
+  font-style: italic;
+}
+
+.back-list-btn {
+  margin: 40rpx 0 60rpx 0;
+  height: 94rpx;
+}
+
+/* 占位图 */
+.empty-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 100rpx 0;
+}
+
+.empty-emoji {
+  font-size: 80rpx;
+  margin-bottom: 20rpx;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: #4A4A4A;
+  font-weight: 500;
+  margin-bottom: 8rpx;
+}
+
+.empty-tip {
+  font-size: 22rpx;
+  color: #8C8C8C;
+}

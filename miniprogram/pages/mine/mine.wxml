@@ -1,0 +1,103 @@
+<view class="container">
+  <!-- 用户卡片 -->
+  <view class="profile-card card">
+    <view class="profile-main">
+      <image class="avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
+      <view class="profile-info">
+        <view class="nickname">{{userInfo.nickName}}</view>
+        <view class="sync-badge">
+          <text class="sync-dot"></text>
+          <text class="sync-text">{{syncStatus}}</text>
+        </view>
+      </view>
+    </view>
+    <view class="cloud-intro">
+      全平台无缝同步，支持微信跨设备登录随时查看历史记录。数据本地与云端全面安全加密，时刻贴心守护您的身体机密隐私。
+    </view>
+  </view>
+
+  <!-- 科普指南卡片 -->
+  <view class="science-entry card" bindtap="openScience">
+    <view class="science-entry-left">
+      <view class="science-icon">💡</view>
+      <view class="science-info">
+        <view class="science-title">布里斯托分类科普</view>
+        <view class="science-desc">如何读懂便便性状传递的肠壁信号？</view>
+      </view>
+    </view>
+    <view class="science-arrow">查看</view>
+  </view>
+
+  <!-- 选项列表 -->
+  <view class="menu-list card">
+    <button class="menu-item feedback-btn" open-type="feedback" hover-class="menu-item-hover">
+      <view class="menu-left">
+        <text class="menu-icon">💬</text>
+        <text class="menu-text">产品槽点反馈</text>
+      </view>
+      <text class="menu-arrow">▶</text>
+    </button>
+    
+    <button class="menu-item feedback-btn" open-type="contact" hover-class="menu-item-hover">
+      <view class="menu-left">
+        <text class="menu-icon">📞</text>
+        <text class="menu-text">在线客服咨询</text>
+      </view>
+      <text class="menu-arrow">▶</text>
+    </button>
+
+    <view class="menu-item" bindtap="openAbout" hover-class="menu-item-hover">
+      <view class="menu-left">
+        <text class="menu-icon">💚</text>
+        <text class="menu-text">关于舒便健康</text>
+      </view>
+      <text class="menu-arrow">▶</text>
+    </view>
+
+    <view class="menu-item" bindtap="clearCache" hover-class="menu-item-hover">
+      <view class="menu-left">
+        <text class="menu-icon text-red">🗑️</text>
+        <text class="menu-text text-red">清空本地所有缓存</text>
+      </view>
+      <text class="menu-arrow">▶</text>
+    </view>
+  </view>
+
+  <!-- 科普弹窗 -->
+  <view class="modal-mask" wx:if="{{showScience}}" bindtap="closeScience">
+    <view class="modal-box science-modal" catchtap="none">
+      <view class="modal-header">
+        <view class="modal-title">📖 布里斯托分类法解读</view>
+        <view class="modal-close" bindtap="closeScience">×</view>
+      </view>
+      <scroll-view class="modal-scroll" scroll-y="true">
+        <view class="science-item-card" wx:for="{{scienceList}}" wx:key="type">
+          <view class="sci-title-row">
+            <text class="sci-type-badge">{{item.type}}型</text>
+            <text class="sci-name">{{item.name}}</text>
+          </view>
+          <view class="sci-status">{{item.subtitle}}</view>
+          <view class="sci-desc">{{item.desc}}</view>
+        </view>
+      </scroll-view>
+    </view>
+  </view>
+
+  <!-- 关于弹窗 -->
+  <view class="modal-mask" wx:if="{{showAbout}}" bindtap="closeAbout">
+    <view class="modal-box about-modal" catchtap="none">
+      <view class="modal-header">
+        <view class="modal-title">💚 关于舒便健康</view>
+        <view class="modal-close" bindtap="closeAbout">×</view>
+      </view>
+      <view class="about-content">
+        <view class="about-logo">💩</view>
+        <view class="about-name">舒便健康 v1.0.0</view>
+        <view class="about-desc">
+          致力于为每一位用户提供干净、温馨、无负担的排便追踪与习惯纠正工具。遵循布里斯托大便医学标准，结合先进的 DeepSeek 大语言模型分析，充当您随身的健康消化顾问。
+        </view>
+        <view class="about-footer">舒便设计开发团队 · 温暖呈献 @ 2026</view>
+      </view>
+    </view>
+  </view>
+</view>

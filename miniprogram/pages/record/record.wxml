@@ -1,0 +1,85 @@
+<view class="container">
+  <view class="card">
+    <view class="card-title">💩 形状分类 (布里斯托标准)</view>
+    <bristol-selector selectedType="{{selectedType}}" bindchange="onBristolChange" />
+  </view>
+
+  <view class="card">
+    <view class="card-title">⏱️ 排便时长</view>
+    <view class="slider-box">
+      <view class="duration-display">
+        持续约 <text class="duration-num">{{duration}}</text> 分钟
+      </view>
+      <slider 
+        min="1" 
+        max="30" 
+        value="{{duration}}" 
+        activeColor="#8FAF9F" 
+        backgroundColor="#EAE5E0" 
+        block-color="#8FAF9F" 
+        block-size="20"
+        bindchange="onDurationChange"
+        bindchanging="onDurationChange"
+      />
+      <view class="slider-labels">
+        <text>极速 (1分)</text>
+        <text>正常 (5分)</text>
+        <text>偏长 (30分)</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="card-title">📅 发生时间</view>
+    <view class="picker-row">
+      <picker mode="date" value="{{date}}" end="{{maxDate}}" bindchange="onDateChange" class="time-picker">
+        <view class="picker-item">
+          <text class="picker-label">排便日期</text>
+          <text class="picker-value">{{date}}</text>
+        </view>
+      </picker>
+      <view class="picker-divider"></view>
+      <picker mode="time" value="{{time}}" bindchange="onTimeChange" class="time-picker">
+        <view class="picker-item">
+          <text class="picker-label">具体时刻</text>
+          <text class="picker-value">{{time}}</text>
+        </view>
+      </picker>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="card-title">📝 备注与身体感受</view>
+    <textarea 
+      class="notes-textarea" 
+      placeholder="记录今天吃了什么、肚子胀不胀、是否通畅等感受..." 
+      placeholder-class="notes-placeholder"
+      value="{{notes}}"
+      bindinput="onNotesInput"
+      maxlength="200"
+    />
+  </view>
+
+  <view class="card">
+    <view class="card-title">📸 拍照/相册备份 (仅作健康分析)</view>
+    <view class="photo-upload-box">
+      <block wx:if="{{photoPath}}">
+        <view class="photo-preview-wrapper">
+          <image src="{{photoPath}}" mode="aspectFill" class="photo-preview"></image>
+          <view class="delete-photo-btn" bindtap="deletePhoto">×</view>
+        </view>
+      </block>
+      <block wx:else>
+        <view class="photo-placeholder" bindtap="choosePhoto">
+          <view class="photo-icon">+</view>
+          <view class="photo-text">上传或拍摄便便照片</view>
+          <view class="photo-tip">照片安全加密并存放于云开发端</view>
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <button class="btn-primary save-btn" hover-class="btn-primary-hover" bindtap="saveRecord" disabled="{{isSubmitting}}">
+    {{recordId ? '更新并同步记录' : '保存记录'}}
+  </button>
+</view>

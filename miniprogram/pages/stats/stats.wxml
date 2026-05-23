@@ -1,0 +1,102 @@
+<view class="container">
+  <!-- 顶端过滤栏 -->
+  <view class="filter-tab">
+    <view class="tab-item {{rangeType === '7' ? 'active' : ''}}" bindtap="setRange" data-type="7">最近7天</view>
+    <view class="tab-item {{rangeType === '30' ? 'active' : ''}}" bindtap="setRange" data-type="30">最近30天</view>
+    <view class="tab-item {{rangeType === 'custom' ? 'active' : ''}}" bindtap="setRange" data-type="custom">自定义</view>
+  </view>
+
+  <!-- 自定义日期起止选择 -->
+  <view class="custom-date-box card" wx:if="{{rangeType === 'custom'}}">
+    <view class="custom-date-row">
+      <picker mode="date" value="{{startDate}}" end="{{maxDate}}" bindchange="onStartDateChange">
+        <view class="date-picker-btn">{{startDate}}</view>
+      </picker>
+      <text class="date-sep">至</text>
+      <picker mode="date" value="{{endDate}}" end="{{maxDate}}" bindchange="onEndDateChange">
+        <view class="date-picker-btn">{{endDate}}</view>
+      </picker>
+    </view>
+  </view>
+
+  <!-- 汇总大盘看板 -->
+  <view class="summary-cards">
+    <view class="sum-card card">
+      <view class="sum-title">排便频次</view>
+      <view class="sum-val">{{totalCount}}<text class="sum-unit">次</text></view>
+      <view class="sum-desc">记录区间总计</view>
+    </view>
+    <view class="sum-card card">
+      <view class="sum-title">黄金便便率</view>
+      <view class="sum-val text-green">{{healthyRatio}}<text class="sum-unit">%</text></view>
+      <view class="sum-desc">3型与4型占比</view>
+    </view>
+    <view class="sum-card card">
+      <view class="sum-title">平均时长</view>
+      <view class="sum-val">{{avgDuration || '--'}}<text class="sum-unit">分钟</text></view>
+      <view class="sum-desc">单次平均耗时</view>
+    </view>
+  </view>
+
+  <!-- 频次趋势图表卡片 -->
+  <view class="card">
+    <view class="card-title">📈 每日排便频次趋势</view>
+    <block wx:if="{{totalCount > 0}}">
+      <view class="trend-chart-box">
+        <scroll-view class="chart-scroll" scroll-x="true" scroll-with-animation="true" scroll-left="1000">
+          <view class="chart-content">
+            <view class="chart-bar-wrapper" wx:for="{{trendData}}" wx:key="label">
+              <view class="chart-bar-top-num {{item.count > 0 ? '' : 'text-transparent'}}">{{item.count}}</view>
+              <view class="chart-bar-outer">
+                <view 
+                  class="chart-bar-inner" 
+                  style="height: {{item.heightPct}}%;"
+                ></view>
+              </view>
+              <view class="chart-bar-label">{{item.label}}</view>
+            </view>
+          </view>
+        </scroll-view>
+      </view>
+    </block>
+    <block wx:else>
+      <view class="empty-chart">
+        <view class="empty-chart-emoji">😴</view>
+        <text>该时间段内暂无记录数据</text>
+      </view>
+    </block>
+  </view>
+
+  <!-- 排便类型占比卡片 -->
+  <view class="card">
+    <view class="card-title">📊 便便性状占比分布</view>
+    <block wx:if="{{totalCount > 0}}">
+      <view class="dist-list">
+        <view class="dist-item" wx:for="{{typeDistribution}}" wx:key="type">
+          <view class="dist-header">
+            <view class="dist-type-info">
+              <text class="dist-emoji">{{item.emoji}}</text>
+              <text class="dist-name">{{item.name}}</text>
+            </view>
+            <view class="dist-count-info">
+              <text class="dist-count">{{item.count}}次</text>
+              <text class="dist-pct">{{item.pct}}%</text>
+            </view>
+          </view>
+          <view class="progress-outer">
+            <view 
+              class="progress-inner" 
+              style="width: {{item.pct}}%; background-color: {{item.color}};"
+            ></view>
+          </view>
+        </view>
+      </view>
+    </block>
+    <block wx:else>
+      <view class="empty-chart">
+        <view class="empty-chart-emoji">🥗</view>
+        <text>该时间段内暂无形状分布数据</text>
+      </view>
+    </block>
+  </view>
+</view>

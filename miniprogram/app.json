@@ -1,0 +1,55 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/record/record",
+    "pages/stats/stats",
+    "pages/analysis/analysis",
+    "pages/mine/mine"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#FAF8F5",
+    "navigationBarTitleText": "舒便健康",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#FAF8F5"
+  },
+  "tabBar": {
+    "color": "#8C8C8C",
+    "selectedColor": "#8FAF9F",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "images/tab_home.png",
+        "selectedIconPath": "images/tab_home_active.png"
+      },
+      {
+        "pagePath": "pages/stats/stats",
+        "text": "大盘",
+        "iconPath": "images/tab_stats.png",
+        "selectedIconPath": "images/tab_stats_active.png"
+      },
+      {
+        "pagePath": "pages/analysis/analysis",
+        "text": "AI分析",
+        "iconPath": "images/tab_ai.png",
+        "selectedIconPath": "images/tab_ai_active.png"
+      },
+      {
+        "pagePath": "pages/mine/mine",
+        "text": "我的",
+        "iconPath": "images/tab_mine.png",
+        "selectedIconPath": "images/tab_mine_active.png"
+      }
+    ]
+  },
+  "sitemapLocation": "sitemap.json",
+  "style": "v2",
+  "permission": {
+    "scope.writePhotosAlbum": {
+      "desc": "您的排便记录照片将安全加密存储于微信云开发，需获取保存图片权限以导出报告。"
+    }
+  }
+}

@@ -1,0 +1,86 @@
+/**app.wxss**/
+page {
+  background-color: #FAF8F5; /* 暖燕麦白背景，带来温和舒适视觉 */
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica,
+    Segoe UI, Arial, Roboto, 'PingFang SC', 'miui', 'Hiragino Sans GB', 'Microsoft Yahei',
+    sans-serif;
+  color: #4A4A4A;
+  font-size: 28rpx;
+  line-height: 1.6;
+  box-sizing: border-box;
+}
+
+/* 全局布局盒 */
+.container {
+  padding: 30rpx;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* 全局卡片风格 */
+.card {
+  background-color: #FFFFFF;
+  border-radius: 24rpx;
+  padding: 30rpx;
+  margin-bottom: 24rpx;
+  box-shadow: 0 4rpx 24rpx rgba(143, 175, 159, 0.04);
+  box-sizing: border-box;
+}
+
+/* 全局卡片标题 */
+.card-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #4A4A4A;
+  margin-bottom: 20rpx;
+  display: flex;
+  align-items: center;
+}
+
+/* 按钮基础样式 */
+.btn-primary {
+  background-color: #8FAF9F; /* 莫兰迪暖绿 */
+  color: #FFFFFF;
+  border-radius: 40rpx;
+  font-weight: 500;
+  border: none;
+  font-size: 30rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-primary-hover {
+  background-color: #7A9989;
+  opacity: 0.9;
+}
+
+.btn-secondary {
+  background-color: #FFFFFF;
+  color: #8FAF9F;
+  border: 2rpx solid #8FAF9F;
+  border-radius: 40rpx;
+  font-weight: 500;
+  font-size: 30rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-secondary-hover {
+  background-color: #FAF8F5;
+}
+
+/* 轻量文本和标注 */
+.text-muted {
+  color: #8C8C8C;
+  font-size: 24rpx;
+}
+
+/* 隐藏滚动条 */
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  color: transparent;
+}

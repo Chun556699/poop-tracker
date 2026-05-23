@@ -1,0 +1,36 @@
+<view class="bristol-container">
+  <!-- 滚动横条选择器 -->
+  <scroll-view class="type-scroll" scroll-x="true" scroll-with-animation="true" scroll-into-view="item-{{selectedType - 1}}">
+    <view 
+      class="type-item {{selectedType === item.type ? 'active' : ''}}" 
+      wx:for="{{typesList}}" 
+      wx:key="type"
+      id="item-{{index}}"
+      bindtap="selectType" 
+      data-type="{{item.type}}"
+      style="{{selectedType === item.type ? 'background: ' + item.color + '; color: ' + item.textColor + '; border-color: transparent; box-shadow: 0 8rpx 24rpx ' + item.color + '40;' : ''}}"
+    >
+      <view class="item-emoji">{{item.emoji}}</view>
+      <view class="item-type-num">{{item.type}}型</view>
+      <view class="item-status" style="{{selectedType === item.type ? 'background-color: rgba(255,255,255,0.25); color: ' + item.textColor + ';' : ''}}">
+        {{item.subtitle}}
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- 选中状态详细解读卡片 -->
+  <view class="detail-card" style="border-left: 8rpx solid {{typesList[selectedType-1].color}}">
+    <view class="detail-header">
+      <view class="detail-title-row">
+        <text class="detail-emoji">{{typesList[selectedType-1].emoji}}</text>
+        <text class="detail-title">{{typesList[selectedType-1].title}}</text>
+      </view>
+      <view class="detail-badge" style="background-color: {{typesList[selectedType-1].color}}15; color: {{typesList[selectedType-1].color}}">
+        {{typesList[selectedType-1].subtitle}}
+      </view>
+    </view>
+    <view class="detail-desc">
+      {{typesList[selectedType-1].desc}}
+    </view>
+  </view>
+</view>

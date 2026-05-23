@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "新增排便记录",
+  "usingComponents": {
+    "bristol-selector": "../../components/bristol-selector/bristol-selector"
+  }
+}

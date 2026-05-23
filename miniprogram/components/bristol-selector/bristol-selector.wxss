@@ -1,0 +1,102 @@
+.bristol-container {
+  width: 100%;
+}
+
+.type-scroll {
+  white-space: nowrap;
+  width: 100%;
+  padding: 10rpx 0 20rpx 0;
+  box-sizing: border-box;
+}
+
+.type-item {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 160rpx;
+  height: 220rpx;
+  margin-right: 20rpx;
+  border-radius: 24rpx;
+  background-color: #FFFFFF;
+  border: 2rpx solid #EAE5E0;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-sizing: border-box;
+}
+
+.type-item:first-child {
+  margin-left: 5rpx;
+}
+
+.type-item.active {
+  transform: scale(1.05);
+}
+
+.item-emoji {
+  font-size: 56rpx;
+  margin-bottom: 12rpx;
+}
+
+.item-type-num {
+  font-size: 26rpx;
+  font-weight: 600;
+  margin-bottom: 6rpx;
+}
+
+.item-status {
+  font-size: 20rpx;
+  padding: 2rpx 12rpx;
+  border-radius: 12rpx;
+  background-color: #FAF8F5;
+  color: #8C8C8C;
+  max-width: 140rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 详情卡片 */
+.detail-card {
+  margin-top: 10rpx;
+  background-color: #FAF8F5;
+  border-radius: 20rpx;
+  padding: 24rpx;
+  transition: all 0.3s ease;
+  box-shadow: inset 0 2rpx 8rpx rgba(0,0,0,0.01);
+}
+
+.detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12rpx;
+}
+
+.detail-title-row {
+  display: flex;
+  align-items: center;
+}
+
+.detail-emoji {
+  font-size: 40rpx;
+  margin-right: 12rpx;
+}
+
+.detail-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #4A4A4A;
+}
+
+.detail-badge {
+  font-size: 22rpx;
+  font-weight: 600;
+  padding: 4rpx 16rpx;
+  border-radius: 20rpx;
+}
+
+.detail-desc {
+  font-size: 24rpx;
+  color: #8C8C8C;
+  line-height: 1.6;
+}

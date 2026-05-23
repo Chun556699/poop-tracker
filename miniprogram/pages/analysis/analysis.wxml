@@ -1,0 +1,98 @@
+<view class="container">
+  <!-- 报告详情阅读模式 -->
+  <block wx:if="{{currentReport}}">
+    <view class="current-report-wrapper">
+      <view class="report-header">
+        <view class="report-header-left">
+          <view class="report-header-title">💚 肠胃 AI 智能评估报告</view>
+          <view class="report-header-date">监测周期：{{currentReport.dateRange}}</view>
+        </view>
+        <view class="report-close-btn" bindtap="closeCurrentReport">关闭报告</view>
+      </view>
+
+      <!-- 模块化渲染精美解析卡片 -->
+      <view class="report-section card" wx:for="{{currentReport.sections}}" wx:key="title">
+        <view class="section-card-title">{{item.title}}</view>
+        <view class="section-card-content">
+          <view 
+            class="section-line {{line.isListItem ? 'list-item' : ''}} {{line.isMuted ? 'muted-item' : ''}}" 
+            wx:for="{{item.contentLines}}" 
+            wx:for-item="line" 
+            wx:key="text"
+          >
+            <view class="list-bullet" wx:if="{{line.isListItem}}">☘️</view>
+            <text class="line-text">{{line.text}}</text>
+          </view>
+        </view>
+      </view>
+
+      <button class="btn-secondary back-list-btn" bindtap="closeCurrentReport">返回档案列表</button>
+    </view>
+  </block>
+
+  <!-- AI 主控生成与档案面板 -->
+  <block wx:else>
+    <!-- 生成面板主卡片 -->
+    <view class="generate-card card">
+      <view class="ai-header">
+        <view class="ai-avatar">🤖</view>
+        <view class="ai-title-row">
+          <view class="ai-title">DeepSeek 智能健康顾问</view>
+          <view class="ai-subtitle">基于医学标准的肠胃微生态诊断</view>
+        </view>
+      </view>
+
+      <!-- 生成等待状态 -->
+      <block wx:if="{{isGenerating}}">
+        <view class="generating-box">
+          <view class="spinner"></view>
+          <view class="generating-tip">{{loadingTip}}</view>
+        </view>
+      </block>
+
+      <!-- 初始就绪状态 -->
+      <block wx:else>
+        <view class="ai-intro">
+          排便形状与规律是胃肠吸收的“晴雨表”。AI 顾问会深入研读您过去一周的排便规律、布里斯托指标，为您出具专业的全方位改善报告与膳食指导。
+        </view>
+        <view class="data-status-bar">
+          <text>近 7 天累计排便监测：<text class="status-count">{{recordsCount}} 次</text></text>
+        </view>
+        <button class="btn-primary generate-btn" hover-class="btn-primary-hover" bindtap="generateReport" disabled="{{isGenerating}}">
+          🌟 一键生成 AI 报告
+        </button>
+      </block>
+    </view>
+
+    <!-- 历史报告归档列表 -->
+    <view class="history-section">
+      <view class="section-title">📅 历史健康档案</view>
+      <block wx:if="{{historyReports.length > 0}}">
+        <view 
+          class="history-card card" 
+          wx:for="{{historyReports}}" 
+          wx:key="id" 
+          bindtap="viewHistoryDetail" 
+          data-id="{{item.id || item._id}}"
+          hover-class="card-hover"
+        >
+          <view class="history-left">
+            <view class="history-icon">📑</view>
+            <view class="history-info">
+              <view class="history-range">{{item.dateRange}}</view>
+              <view class="history-date">评估生成于 {{item.dateStr}}</view>
+            </view>
+          </view>
+          <view class="history-arrow">▶</view>
+        </view>
+      </block>
+      <block wx:elif="{{hasLoaded}}">
+        <view class="empty-placeholder">
+          <view class="empty-emoji">🧘</view>
+          <view class="empty-text">尚无健康评估报告</view>
+          <view class="empty-tip">记录充足排便样本后，点击上方一键研读</view>
+        </view>
+      </block>
+    </view>
+  </block>
+</view>

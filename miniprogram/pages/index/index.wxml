@@ -1,0 +1,68 @@
+<view class="container">
+  <!-- 问候卡片 -->
+  <view class="greeting-box">
+    <view class="greeting-title">Hi，主人</view>
+    <view class="greeting-desc">{{greeting}}</view>
+  </view>
+
+  <!-- 数据快览大盘 -->
+  <view class="stats-grid">
+    <view class="stat-card">
+      <view class="stat-num">{{todayCount}}</view>
+      <view class="stat-label">今日排便 (次)</view>
+    </view>
+    <view class="stat-card">
+      <view class="stat-num">{{averageDuration ? averageDuration : '--'}}</view>
+      <view class="stat-label">平均时长 (分钟)</view>
+    </view>
+  </view>
+
+  <!-- 一键记录核心快捷大按钮 -->
+  <view class="record-btn-wrapper" bindtap="navToRecord">
+    <view class="record-btn" hover-class="record-btn-hover">
+      <view class="record-btn-inner">
+        <text class="record-emoji">💩</text>
+        <text class="record-text">记录排便</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 最近记录列表 -->
+  <view class="section">
+    <view class="section-header">
+      <text class="section-title">🕒 最近排便记录</text>
+      <text class="text-muted" wx:if="{{recentRecords.length > 0}}">点击可编辑记录</text>
+    </view>
+
+    <block wx:if="{{recentRecords.length > 0}}">
+      <view 
+        class="record-card card" 
+        wx:for="{{recentRecords}}" 
+        wx:key="_id" 
+        bindtap="editRecord" 
+        data-id="{{item._id || item.id}}"
+        hover-class="card-hover"
+      >
+        <view class="record-card-main">
+          <view class="record-card-emoji">{{bristolNames[item.bristolType].emoji}}</view>
+          <view class="record-card-info">
+            <view class="record-card-title">{{bristolNames[item.bristolType].text}}</view>
+            <view class="record-card-time">{{item.date}} {{item.time}} · 历时 {{item.duration}} 分钟</view>
+          </view>
+        </view>
+        <view class="record-card-sub" wx:if="{{item.notes || item.photoUrl}}">
+          <view class="record-notes" wx:if="{{item.notes}}">📝 {{item.notes}}</view>
+          <view class="photo-badge" wx:if="{{item.photoUrl}}">🖼️ 已存备份</view>
+        </view>
+      </view>
+    </block>
+    
+    <block wx:elif="{{hasLoaded}}">
+      <view class="empty-placeholder">
+        <view class="empty-emoji">🍃</view>
+        <view class="empty-text">当前空空如也，快来添加第一条记录吧</view>
+        <view class="empty-tip">健康的生活习惯从每一次精细记录开始</view>
+      </view>
+    </block>
+  </view>
+</view>
