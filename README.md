@@ -84,7 +84,7 @@
 
 | 首页 | 记录页 | 统计大盘 | 排行榜 | 个人中心 |
 |:---:|:---:|:---:|:---:|:---:|
-| ![首页](https://via.placeholder.com/200x400?text=Home) | ![记录](https://via.placeholder.com/200x400?text=Record) | ![统计](https://via.placeholder.com/200x400?text=Stats) | ![排行](https://via.placeholder.com/200x400?text=Leaderboard) | ![我的](https://via.placeholder.com/200x400?text=Mine) |
+| ![首页](![PixPin_2026-05-28_03-00-02](https://pub.mini-tools.uk/30-day/92bcac76-f2e1-489e-ac2b-8a58b66e67b5.png)) 
 
 > ⌛ _截图待更新 — 欢迎贡献真实截图！_
 
