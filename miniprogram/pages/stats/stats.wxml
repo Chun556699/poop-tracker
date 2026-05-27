@@ -38,6 +38,43 @@
     </view>
   </view>
 
+  <!-- 排便记录日历卡片 -->
+  <view class="card">
+    <view class="calendar-header">
+      <view class="calendar-title">📅 排便月度日历</view>
+      <view class="calendar-month-selector">
+        <view class="month-btn" bindtap="prevMonth">◀</view>
+        <view class="month-label">{{currentYear}}年{{currentMonth}}月</view>
+        <view class="month-btn" bindtap="nextMonth">▶</view>
+      </view>
+    </view>
+    
+    <view class="calendar-weeks">
+      <view class="week-label">日</view>
+      <view class="week-label">一</view>
+      <view class="week-label">二</view>
+      <view class="week-label">三</view>
+      <view class="week-label">四</view>
+      <view class="week-label">五</view>
+      <view class="week-label">六</view>
+    </view>
+    
+    <view class="calendar-grid">
+      <view 
+        class="calendar-day {{item.isPlaceholder ? 'placeholder' : ''}} {{item.isToday ? 'today' : ''}} {{item.hasRecords ? 'has-records' : ''}}" 
+        wx:for="{{calendarDays}}" 
+        wx:key="index" 
+        bindtap="tapCalendarDay" 
+        data-day="{{item}}"
+      >
+        <view class="day-num" wx:if="{{!item.isPlaceholder}}">{{item.day}}</view>
+        <view class="day-emoji" wx:if="{{!item.isPlaceholder && item.hasRecords}}">{{item.emoji}}</view>
+        <view class="day-dot" wx:if="{{!item.isPlaceholder && item.hasRecords}}"></view>
+      </view>
+    </view>
+    <view class="calendar-tips">提示：点击带表情符号的日期，可快速查看当天的排便详情 🍌</view>
+  </view>
+
   <!-- 频次趋势图表卡片 -->
   <view class="card">
     <view class="card-title">📈 每日排便频次趋势</view>

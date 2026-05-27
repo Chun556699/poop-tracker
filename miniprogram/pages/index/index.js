@@ -1,5 +1,5 @@
-// pages/index/index.js
 const db = wx.cloud ? wx.cloud.database() : null;
+const timer = require('../../utils/timer');
 
 Page({
   data: {
@@ -7,7 +7,7 @@ Page({
     todayCount: 0,
     averageDuration: 0,
     lastRecord: null,
-    recentRecords: [], // 最近3次记录列表
+    recentRecords: [],
     hasLoaded: false,
     bristolNames: {
       1: { emoji: '🌰', text: '1型：散状硬球 (严重便秘)' },
@@ -17,24 +17,34 @@ Page({
       5: { emoji: '🍞', text: '5型：软质断块 (纤维偏少)' },
       6: { emoji: '🥣', text: '6型：糊状泥状 (轻微腹泻)' },
       7: { emoji: '💧', text: '7型：水样无固体 (严重腹泻)' }
-    }
+    },
+    timerRunning: false,
+    timerDisplay: '00:00:00'
   },
 
   onLoad() {
     this.updateGreeting();
+    this.resumeTimerIfRunning();
   },
 
   onShow() {
     this.fetchHomeData();
+    this.resumeTimerIfRunning();
   },
 
-  // 下拉刷新
+  onHide() {
+    this.stopTimerTick();
+  },
+
+  onUnload() {
+    this.stopTimerTick();
+  },
+
   onPullDownRefresh() {
     this.fetchHomeData();
     wx.stopPullDownRefresh();
   },
 
-  // 动态更新问候语（根据24小时制）
   updateGreeting() {
     const hour = new Date().getHours();
     let greeting = '你好！今天肠胃状况如何？';
@@ -54,25 +64,26 @@ Page({
     this.setData({ greeting });
   },
 
-  // 获取主页所需统计和记录列表
   fetchHomeData() {
-    if (!db) {
-      this.fetchFromLocalCache();
+    const app = getApp();
+    const openid = app.globalData.openid;
+
+    if (!db || !openid) {
+      this.fetchFromLocalCache(openid);
       return;
     }
 
     wx.showNavigationBarLoading();
 
-    // 获取今天0时和24时的毫秒数
     const now = new Date();
     const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
     const endOfToday = startOfToday + 24 * 60 * 60 * 1000 - 1;
 
     const _ = db.command;
 
-    // 1. 查询今天的记录数量与计算平均时长
     db.collection('poop_records')
       .where({
+        _openid: openid,
         timestamp: _.gte(startOfToday).and(_.lte(endOfToday))
       })
       .get()
@@ -92,10 +103,14 @@ Page({
       })
       .catch(err => {
         console.error('获取今日记录失败', err);
+        if (err.errMsg && (err.errMsg.includes('not exist') || err.errMsg.includes('-502005'))) {
+          console.warn('poop_records 集合不存在，自动降级本地缓存');
+          this.fetchFromLocalCache(openid);
+        }
       });
 
-    // 2. 查询最近3次记录
     db.collection('poop_records')
+      .where({ _openid: openid })
       .orderBy('timestamp', 'desc')
       .limit(3)
       .get()
@@ -112,20 +127,21 @@ Page({
         wx.hideNavigationBarLoading();
         this.setData({ hasLoaded: true });
         console.error('获取最近记录失败', err);
+        if (err.errMsg && (err.errMsg.includes('not exist') || err.errMsg.includes('-502005'))) {
+          this.fetchFromLocalCache(openid);
+        }
       });
   },
 
-  // 纯本地缓存的降级数据加载（支持完全无网调试）
-  fetchFromLocalCache() {
-    const list = wx.getStorageSync('local_poop_records') || [];
-    // 按时间戳降序
+  fetchFromLocalCache(openid) {
+    const list = (wx.getStorageSync('local_poop_records') || [])
+      .filter(item => !openid || item._openid === openid);
     list.sort((a, b) => b.timestamp - a.timestamp);
 
     const now = new Date();
     const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
     const endOfToday = startOfToday + 24 * 60 * 60 * 1000 - 1;
 
-    // 筛选今天
     const todayList = list.filter(item => item.timestamp >= startOfToday && item.timestamp <= endOfToday);
     const count = todayList.length;
     let totalDuration = 0;
@@ -143,18 +159,79 @@ Page({
     });
   },
 
-  // 跳转记录页
   navToRecord() {
+    var url = '/pages/record/record';
+    if (timer.isRunning()) {
+      var durationMinutes = timer.getDurationMinutes();
+      timer.stop();
+      this.stopTimerTick();
+      this.setData({ timerRunning: false, timerDisplay: '00:00:00' });
+      url += '?timerDuration=' + durationMinutes;
+    }
     wx.navigateTo({
-      url: '/pages/record/record'
+      url: url
     });
   },
 
-  // 点击历史卡片跳转编辑
   editRecord(e) {
     const id = e.currentTarget.dataset.id;
     wx.navigateTo({
       url: `/pages/record/record?id=${id}`
+    });
+  },
+
+  resumeTimerIfRunning() {
+    if (!timer.isRunning()) return;
+    var elapsed = timer.getElapsedSeconds();
+    this.setData({
+      timerRunning: true,
+      timerDisplay: timer.formatTime(elapsed)
+    });
+    this.startTimerTick();
+  },
+
+  startTimerTick() {
+    if (this._timerInterval) clearInterval(this._timerInterval);
+    this._timerInterval = setInterval(function () {
+      if (!timer.isRunning()) {
+        this.stopTimerTick();
+        this.setData({ timerRunning: false, timerDisplay: '00:00:00' });
+        return;
+      }
+      var elapsed = timer.getElapsedSeconds();
+      this.setData({ timerDisplay: timer.formatTime(elapsed) });
+    }.bind(this), 1000);
+  },
+
+  stopTimerTick() {
+    if (this._timerInterval) {
+      clearInterval(this._timerInterval);
+      this._timerInterval = null;
+    }
+  },
+
+  onTimerTap() {
+    if (this.data.timerRunning) {
+      this.stopTimerAndNavigate();
+    } else {
+      this.startTimer();
+    }
+  },
+
+  startTimer() {
+    timer.start();
+    this.setData({ timerRunning: true, timerDisplay: '00:00:00' });
+    this.startTimerTick();
+    wx.showToast({ title: '计时已开始', icon: 'none', duration: 1000 });
+  },
+
+  stopTimerAndNavigate() {
+    var durationMinutes = timer.getDurationMinutes();
+    timer.stop();
+    this.stopTimerTick();
+    this.setData({ timerRunning: false, timerDisplay: '00:00:00' });
+    wx.navigateTo({
+      url: '/pages/record/record?timerDuration=' + durationMinutes
     });
   }
 });

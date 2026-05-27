@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <!-- 渐变配置 -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F6F3EE" />
+      <stop offset="100%" stop-color="#EAE3DC" />
+    </linearGradient>
+    
+    <linearGradient id="leafGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#A2C3B3" />
+      <stop offset="100%" stop-color="#7C9E8C" />
+    </linearGradient>
+    
+    <linearGradient id="poopGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E3C9B6" />
+      <stop offset="100%" stop-color="#BCA393" />
+    </linearGradient>
+    
+    <!-- 柔和投影 -->
+    <filter id="softShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#8FAF9F" flood-opacity="0.18" />
+    </filter>
+    
+    <filter id="charShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#5A4738" flood-opacity="0.1" />
+    </filter>
+  </defs>
+
+  <!-- 圆角 App 图标背景 (莫兰迪奶油灰) -->
+  <rect width="512" height="512" rx="112" fill="url(#bgGrad)" />
+  
+  <!-- 外围极简辅助环（象征肠道调理、健康环绕） -->
+  <circle cx="256" cy="256" r="210" fill="none" stroke="#FFFFFF" stroke-width="6" stroke-dasharray="16 12" opacity="0.6" />
+
+  <!-- 1. 底部托举的健康草本绿叶 (Leaf) -->
+  <g filter="url(#softShadow)">
+    <path d="M 120,330 
+             C 170,390 280,390 380,340 
+             C 410,325 435,290 410,270 
+             C 340,220 230,225 150,285 
+             C 125,300 110,315 120,330 Z" 
+          fill="url(#leafGrad)" />
+          
+    <!-- 叶片叶脉极简纹理 -->
+    <path d="M 140,318 C 230,280 320,290 390,305" 
+          fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" opacity="0.35" />
+  </g>
+
+  <!-- 2. 主体角色：一个极其可爱、温暖饱满的 3D 治愈系便便/云朵角色 (Character) -->
+  <g filter="url(#charShadow)">
+    <!-- 身体轮廓（采用三层堆叠圆角自然曲线，形似云朵般可爱） -->
+    <path d="M 256,120 
+             C 275,120 285,145 280,160 
+             C 320,165 355,190 355,225 
+             C 355,235 345,245 335,248 
+             C 375,255 400,285 400,325 
+             C 400,365 365,390 310,390
+             L 202,390
+             C 147,390 112,365 112,325
+             C 112,285 137,255 177,248
+             C 167,245 157,235 157,225
+             C 157,190 192,165 232,160
+             C 227,145 237,120 256,120 Z" 
+          fill="url(#poopGrad)" />
+  </g>
+
+  <!-- 3. 可爱生动的微笑表情 (Facial Expressions) -->
+  <g>
+    <!-- 左眼 (弯弯的治愈笑眼) -->
+    <path d="M 205,245 Q 215,235 225,245" fill="none" stroke="#5A4738" stroke-width="5" stroke-linecap="round" />
+    
+    <!-- 右眼 (弯弯的治愈笑眼) -->
+    <path d="M 287,245 Q 297,235 307,245" fill="none" stroke="#5A4738" stroke-width="5" stroke-linecap="round" />
+    
+    <!-- 腮红 (莫兰迪珊瑚粉) -->
+    <ellipse cx="192" cy="256" rx="14" ry="8" fill="#E8A08A" opacity="0.5" />
+    <ellipse cx="320" cy="256" rx="14" ry="8" fill="#E8A08A" opacity="0.5" />
+    
+    <!-- 抿嘴微笑 (超萌弧线) -->
+    <path d="M 246,265 Q 256,275 266,265" fill="none" stroke="#5A4738" stroke-width="5" stroke-linecap="round" />
+  </g>
+
+  <!-- 4. 头顶的小光芒/绿芽（象征排空后的轻松、新生与活力） -->
+  <g>
+    <path d="M 256,85 C 256,65 270,55 280,60 C 275,75 263,85 256,85 Z" fill="#8FAF9F" />
+    <path d="M 256,85 C 256,68 245,60 238,64 C 241,76 251,85 256,85 Z" fill="#A2C3B3" />
+  </g>
+</svg>

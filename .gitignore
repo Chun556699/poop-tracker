@@ -12,3 +12,7 @@ $RECYCLE.BIN/
 
 # Node.js
 node_modules/
+
+# API 密钥和私有配置（切勿提交）
+miniprogram/config.js
+project.private.config.json

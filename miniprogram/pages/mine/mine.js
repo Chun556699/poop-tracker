@@ -1,11 +1,16 @@
-// pages/mine/mine.js
+const db = wx.cloud ? wx.cloud.database() : null;
+
 Page({
   data: {
     userInfo: {
-      avatarUrl: 'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2UTgVYia8icgZCOfMTNeyFscD6v1ic0Z6WclL8XQX5C7Uu6TOfg/0', // 微信官方默认灰色头像占位符
-      nickName: '舒便健康官'
+      avatarUrl: 'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2UTgVYia8icgZCOfMTNeyFscD6v1ic0Z6WclL8XQX5C7Uu6TOfg/0',
+      nickName: '首席拉翔官'
     },
-    syncStatus: '已同步',
+    syncStatus: '📱 本地安全沙盒存储',
+    isLoggedIn: false,
+    showLoginModal: false,
+    tempAvatarUrl: '',
+    tempNickName: '',
     showScience: false,
     showAbout: false,
     scienceList: [
@@ -20,15 +25,144 @@ Page({
   },
 
   onShow() {
-    // 检查云开发是否初始化就绪
-    if (wx.cloud) {
-      this.setData({ syncStatus: '☁️ 微信云端实时同步' });
-    } else {
-      this.setData({ syncStatus: '📱 本地多端存储' });
+    const info = wx.getStorageSync('local_user_info');
+    const hasCloud = !!(db && getApp().globalData.openid);
+    this.setData({
+      syncStatus: hasCloud ? '☁️ 云端安全同步' : '📱 本地安全沙盒存储',
+      userInfo: info || {
+        avatarUrl: 'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2UTgVYia8icgZCOfMTNeyFscD6v1ic0Z6WclL8XQX5C7Uu6TOfg/0',
+        nickName: '首席拉翔官'
+      },
+      isLoggedIn: !!info
+    });
+  },
+
+  openLoginModal() {
+    this.setData({
+      showLoginModal: true,
+      tempAvatarUrl: this.data.userInfo.avatarUrl,
+      tempNickName: this.data.userInfo.nickName === '首席拉翔官' ? '' : this.data.userInfo.nickName
+    });
+  },
+
+  closeLoginModal() {
+    this.setData({ showLoginModal: false });
+  },
+
+  onChooseAvatar(e) {
+    const { avatarUrl } = e.detail;
+    const fs = wx.getFileSystemManager();
+    const ext = avatarUrl.split('.').pop() || 'png';
+    const savedPath = `${wx.env.USER_DATA_PATH}/avatar_${Date.now()}.${ext}`;
+
+    fs.saveFile({
+      tempFilePath: avatarUrl,
+      filePath: savedPath,
+      success: (res) => {
+        this.setData({ tempAvatarUrl: res.savedFilePath });
+      },
+      fail: (err) => {
+        console.error('持久化头像文件失败，降级使用原路径', err);
+        this.setData({ tempAvatarUrl: avatarUrl });
+      }
+    });
+  },
+
+  onChooseCustomAvatar() {
+    wx.chooseMedia({
+      count: 1,
+      mediaType: ['image'],
+      sourceType: ['album', 'camera'],
+      success: (res) => {
+        const tempFilePath = res.tempFiles[0].tempFilePath;
+        const fs = wx.getFileSystemManager();
+        const ext = tempFilePath.split('.').pop() || 'png';
+        const savedPath = `${wx.env.USER_DATA_PATH}/custom_avatar_${Date.now()}.${ext}`;
+
+        fs.saveFile({
+          tempFilePath,
+          filePath: savedPath,
+          success: (saveRes) => {
+            this.setData({ tempAvatarUrl: saveRes.savedFilePath });
+          },
+          fail: () => {
+            this.setData({ tempAvatarUrl: tempFilePath });
+          }
+        });
+      }
+    });
+  },
+
+  onNicknameInput(e) {
+    this.setData({ tempNickName: e.detail.value });
+  },
+
+  onNicknameBlur(e) {
+    this.setData({ tempNickName: e.detail.value });
+  },
+
+  async confirmLogin() {
+    const avatar = this.data.tempAvatarUrl;
+    const nickname = this.data.tempNickName.trim();
+
+    if (!nickname) {
+      wx.showToast({ title: '请输入或选择微信昵称', icon: 'none' });
+      return;
+    }
+
+    const info = {
+      avatarUrl: avatar || 'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2UTgVYia8icgZCOfMTNeyFscD6v1ic0Z6WclL8XQX5C7Uu6TOfg/0',
+      nickName: nickname
+    };
+
+    wx.setStorageSync('local_user_info', info);
+
+    this.setData({
+      userInfo: info,
+      isLoggedIn: true,
+      showLoginModal: false,
+      syncStatus: '☁️ 云端安全同步'
+    });
+
+    wx.showToast({ title: '授权登录成功 🎉', icon: 'success' });
+
+    if (db) {
+      try {
+        const res = await wx.cloud.callFunction({
+          name: 'syncProfile',
+          data: { avatarUrl: info.avatarUrl, nickName: info.nickName }
+        });
+        if (res.result && res.result.code === 0) {
+          this.setData({ syncStatus: '☁️ 云端安全同步' });
+        }
+      } catch (err) {
+        console.error('云端同步个人资料失败', err);
+      }
     }
   },
 
-  // 科普窗口
+  handleLogout() {
+    wx.showModal({
+      title: '提示',
+      content: '确定退出当前微信账号登录吗？退出后将回归匿名拉翔身份。',
+      confirmColor: '#E8A08A',
+      success: (res) => {
+        if (res.confirm) {
+          wx.removeStorageSync('local_user_info');
+          this.setData({
+            userInfo: {
+              avatarUrl: 'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2UTgVYia8icgZCOfMTNeyFscD6v1ic0Z6WclL8XQX5C7Uu6TOfg/0',
+              nickName: '首席拉翔官'
+            },
+            isLoggedIn: false,
+            syncStatus: '📱 本地安全沙盒存储'
+          });
+          wx.showToast({ title: '已安全退出登录', icon: 'none' });
+        }
+      }
+    });
+  },
+
   openScience() {
     this.setData({ showScience: true });
   },
@@ -37,7 +171,6 @@ Page({
     this.setData({ showScience: false });
   },
 
-  // 关于窗口
   openAbout() {
     this.setData({ showAbout: true });
   },
@@ -46,19 +179,28 @@ Page({
     this.setData({ showAbout: false });
   },
 
-  // 清除本地缓存
+  goToLeaderboard() {
+    wx.navigateTo({
+      url: '/pages/leaderboard/leaderboard'
+    });
+  },
+
   clearCache() {
     wx.showModal({
       title: '确定清空所有本地数据？',
-      content: '清除后，本地所有排便记录与 AI 生成报告都将永久抹除，且此操作不可逆。',
+      content: '清除后，本地所有排便记录都将永久抹除，且此操作不可逆。',
       confirmColor: '#E8A08A',
       success: (res) => {
         if (res.confirm) {
           wx.clearStorageSync();
-          wx.showToast({
-            title: '重置清除成功',
-            icon: 'success'
+          this.setData({
+            userInfo: {
+              avatarUrl: 'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2UTgVYia8icgZCOfMTNeyFscD6v1ic0Z6WclL8XQX5C7Uu6TOfg/0',
+              nickName: '首席拉翔官'
+            },
+            isLoggedIn: false
           });
+          wx.showToast({ title: '重置清除成功', icon: 'success' });
         }
       }
     });

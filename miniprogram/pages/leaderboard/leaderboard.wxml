@@ -1,0 +1,51 @@
+<view class="container">
+  <view class="filter-tab">
+    <view class="tab-item {{rangeType === 'all' ? 'active' : ''}}" bindtap="setRange" data-type="all">总排行</view>
+    <view class="tab-item {{rangeType === 'month' ? 'active' : ''}}" bindtap="setRange" data-type="month">本月</view>
+    <view class="tab-item {{rangeType === 'week' ? 'active' : ''}}" bindtap="setRange" data-type="week">本周</view>
+  </view>
+
+  <view wx:if="{{myRank}}" class="my-rank-card card">
+    <view class="my-rank-label">🏅 你的排名</view>
+    <view class="my-rank-value">第 {{myRank.rank}} 名 · 共 {{myRank.count}} 次</view>
+    <view class="my-rank-tip">继续记录，冲冲冲！💪</view>
+  </view>
+
+  <block wx:if="{{!loading && rankList.length > 0}}">
+    <view class="rank-list">
+      <view
+        class="rank-item card"
+        wx:for="{{rankList}}"
+        wx:key="rank"
+        hover-class="card-hover"
+      >
+        <view class="rank-num-box">
+          <text class="rank-num" wx:if="{{item.rank > 3}}">{{item.rank}}</text>
+          <text class="rank-medal" wx:if="{{item.rank === 1}}">🥇</text>
+          <text class="rank-medal" wx:if="{{item.rank === 2}}">🥈</text>
+          <text class="rank-medal" wx:if="{{item.rank === 3}}">🥉</text>
+        </view>
+        <image class="rank-avatar" src="{{item.avatarUrl}}" mode="aspectFill"></image>
+        <view class="rank-info">
+          <view class="rank-name">{{item.nickName}}</view>
+          <view class="rank-count">{{item.count}} 次排便记录</view>
+        </view>
+        <view class="rank-badge">
+          <text>💩 {{item.count}}次</text>
+        </view>
+      </view>
+    </view>
+  </block>
+
+  <block wx:elif="{{!loading && rankList.length === 0}}">
+    <view class="empty-placeholder">
+      <view class="empty-emoji">🏃</view>
+      <view class="empty-text">还没有排行数据</view>
+      <view class="empty-tip">快去记录第一条排便数据吧！</view>
+    </view>
+  </block>
+
+  <view wx:if="{{loading}}" class="loading-box">
+    <view class="loading-text">排行数据加载中...</view>
+  </view>
+</view>

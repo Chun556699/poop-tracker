@@ -155,3 +155,16 @@
   height: 94rpx;
   box-shadow: 0 8rpx 30rpx rgba(143, 175, 159, 0.3);
 }
+
+.btn-delete {
+  margin-top: 0;
+  background-color: #FFFFFF;
+  color: #E8A08A;
+  border: 2rpx solid #E8A08A;
+  box-shadow: none;
+}
+
+.btn-delete-hover {
+  background-color: #FFF0EC;
+  opacity: 0.9;
+}

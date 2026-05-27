@@ -82,4 +82,8 @@
   <button class="btn-primary save-btn" hover-class="btn-primary-hover" bindtap="saveRecord" disabled="{{isSubmitting}}">
     {{recordId ? '更新并同步记录' : '保存记录'}}
   </button>
+
+  <button wx:if="{{recordId}}" class="btn-delete save-btn" hover-class="btn-delete-hover" bindtap="deleteRecord" disabled="{{isSubmitting}}">
+    删除此条记录
+  </button>
 </view>
