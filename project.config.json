@@ -34,7 +34,7 @@
       "outputPath": ""
     }
   },
-  "appid": "wx6645af38f8806a8c",
+  "appid": "wx-your-app-id-here",
   "projectname": "poop-tracker",
   "libVersion": "3.16.0",
   "simulatorType": "wechat",
